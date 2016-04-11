@@ -57,7 +57,7 @@ public:
         printInInreasingOrder(root_);
     }
     
-	bool isEqual(const BinaryTree& other) const
+    bool isEqual(const BinaryTree& other) const
     {
         return isEqual(root_, other.root_);
     }
@@ -127,28 +127,22 @@ private:
     
     T minVal(Node<T>* node) const
     {
-        if (node != nullptr)
-        {
-        	Node<T>* current = node;
-            while (current->leftPtr != nullptr)
-            	current = current->leftPtr;
-        	return current->data;
-        }
-        else
-        	throw std::invalid_argument("Empty Tree");
-	}
+        if (node == nullptr)
+            throw std::invalid_argument("Empty Tree");
+        Node<T>* current = node;
+    	while (current->leftPtr != nullptr)
+               current = current->leftPtr;
+        return current->data;
+    }
     
     T maxVal(Node<T>* node) const
     {
-        if (node != nullptr)
-        {
-            Node<T>* current = node;
-            while (current->rightPtr != nullptr)
-                current = current -> rightPtr;
-            return current->data;
-        }
-        else
+        if (node == nullptr)
             throw std::invalid_argument("Empty Tree");
+        Node<T>* current = node;
+        while (current->rightPtr != nullptr)
+               current = current -> rightPtr;
+        return current->data;
     }
     
     void printInInreasingOrder(const Node<T>* node) const
