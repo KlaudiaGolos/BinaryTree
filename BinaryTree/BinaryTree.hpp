@@ -11,6 +11,22 @@ struct Node
     Node* rightPtr;
 };
 
+namespace
+{
+	template <typename T>
+	bool isEqual(const Node<T>* node1,const Node<T>* node2)
+	{
+    	if (!node1 && !node2)
+        	return true;
+    	else if (node1 != nullptr && node2 != nullptr)
+    	{
+        	return (node1->data == node2->data && isEqual(node1->leftPtr, 	node2->leftPtr)
+                	&& isEqual(node1->rightPtr, node2->rightPtr));
+    	}
+    	return false;
+	}
+}
+
 template <typename T>
 class BinaryTree
 {
@@ -52,14 +68,14 @@ public:
         return maxVal(root_);
     }
 
-    void printInInreasingOrder() const
+    void printInIncreasingOrder() const
     {
-        printInInreasingOrder(root_);
+        printInIncreasingOrder(root_);
     }
     
     bool isEqual(const BinaryTree& other) const
     {
-        return isEqual(root_, other.root_);
+        return ::isEqual(root_, other.root_);
     }
     
 private:
@@ -76,7 +92,7 @@ private:
     
     bool contains(const Node<T>* node, const T target) const
     {
-        if (node == nullptr)
+        if (!node)
             return false;
         else if (target == node->data)
             return true;
@@ -89,9 +105,9 @@ private:
         }
     }
     
-    void insert(Node<T>*& node,const T data)
+    void insert(Node<T>*& node, const T data)
     {
-        if (node == nullptr)
+        if (!node)
             node = newNode(data);
         else
         {
@@ -104,7 +120,7 @@ private:
     
     int size(const Node<T>* node) const
     {
-        if (node == nullptr)
+        if (!node)
             return 0;
         else
             return size(node->leftPtr) + size(node->rightPtr) + 1;
@@ -112,7 +128,7 @@ private:
     
     int maxDepth(const Node<T>* node) const
     {
-        if (node == nullptr)
+        if (!node)
             return 0;
         else
         {
@@ -127,59 +143,41 @@ private:
     
     T minVal(Node<T>* node) const
     {
-        if (node == nullptr)
+        if (!node)
             throw std::invalid_argument("Empty Tree");
         Node<T>* current = node;
-    	while (current->leftPtr != nullptr)
+    	while (current->leftPtr)
                current = current->leftPtr;
         return current->data;
     }
     
     T maxVal(Node<T>* node) const
     {
-        if (node == nullptr)
+        if (!node)
             throw std::invalid_argument("Empty Tree");
         Node<T>* current = node;
-        while (current->rightPtr != nullptr)
+        while (current->rightPtr)
                current = current -> rightPtr;
         return current->data;
     }
     
-    void printInInreasingOrder(const Node<T>* node) const
+    void printInIncreasingOrder(const Node<T>* node) const
     {
         if (!node)
             return;
-        else
-        {
-            printBST(node->leftPtr);
-            std::cout << (node->data) << "\n";
-            printBST(node->rightPtr);
-        }
-    }
-    
-    bool isEqual(const Node<T>* node1,const Node<T>* node2) const
-    {
-        if (!node1 && !node2)
-            return true;
-        else if (node1 != nullptr && node2 != nullptr)
-        {
-            return (node1->data == node2->data && isEqual(node1->leftPtr, node2->leftPtr)
-                    && isEqual(node1->rightPtr, node2->rightPtr));
-        }
-        return false;
+        printBST(node->leftPtr);
+        std::cout << (node->data) << "\n";
+        printBST(node->rightPtr);
     }
     
     void deleteBST(Node<T>* node)
     {
-        if (node == nullptr)
-            return;
         if (!node)
-        {
-            deleteBST(node->leftPtr);
-        	deleteBST(node->rightPtr);
-        	delete node;
-            node = nullptr;
-        }
+            return;
+        deleteBST(node->leftPtr);
+        deleteBST(node->rightPtr);
+        delete node;
+        node = nullptr;
     }
 };
 
